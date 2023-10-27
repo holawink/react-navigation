@@ -23,9 +23,9 @@ import {
 } from 'react-native';
 import { Appbar, IconButton } from 'react-native-paper';
 
-import { Albums } from '../Shared/Albums';
-import { Chat } from '../Shared/Chat';
-import { Contacts } from '../Shared/Contacts';
+import { Albums } from '../shared/Albums';
+import { Chat } from '../shared/Chat';
+import { Contacts } from '../shared/Contacts';
 import { SimpleStack, type SimpleStackParams } from './SimpleStack';
 
 const getTabBarIcon =

@@ -16,8 +16,8 @@ import {
 } from 'react-native';
 import { Paragraph } from 'react-native-paper';
 
-import { Article } from '../Shared/Article';
-import { NewsFeed } from '../Shared/NewsFeed';
+import { Article } from '../shared/Article';
+import { NewsFeed } from '../shared/NewsFeed';
 
 type TransparentStackParams = {
   Article: { author: string };

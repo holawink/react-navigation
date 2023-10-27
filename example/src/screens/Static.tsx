@@ -9,9 +9,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
-import { Albums } from '../Shared/Albums';
-import { Chat } from '../Shared/Chat';
-import { Contacts } from '../Shared/Contacts';
+import { Albums } from '../shared/Albums';
+import { Chat } from '../shared/Chat';
+import { Contacts } from '../shared/Contacts';
 
 const getTabBarIcon =
   (name: React.ComponentProps<typeof MaterialCommunityIcons>['name']) =>

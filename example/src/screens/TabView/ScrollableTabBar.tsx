@@ -9,10 +9,10 @@ import {
   TabView,
 } from 'react-native-tab-view';
 
-import { Albums } from '../../Shared/Albums';
-import { Article } from '../../Shared/Article';
-import { Chat } from '../../Shared/Chat';
-import { Contacts } from '../../Shared/Contacts';
+import { Albums } from '../../shared/Albums';
+import { Article } from '../../shared/Article';
+import { Chat } from '../../shared/Chat';
+import { Contacts } from '../../shared/Contacts';
 
 type State = NavigationState<{
   key: string;
@@ -24,20 +24,16 @@ const renderScene = SceneMap({
   contacts: () => <Contacts />,
   article: () => <Article />,
   chat: () => <Chat bottom />,
-  long: () => <Article />,
-  medium: () => <Article />,
 });
 
-export const AutoWidthTabBar = () => {
-  const { direction } = useLocale();
+export const ScrollableTabBar = () => {
   const [index, onIndexChange] = React.useState(1);
+  const { direction } = useLocale();
   const [routes] = React.useState([
     { key: 'article', title: 'Article' },
     { key: 'contacts', title: 'Contacts' },
     { key: 'albums', title: 'Albums' },
     { key: 'chat', title: 'Chat' },
-    { key: 'long', title: 'long long long title' },
-    { key: 'medium', title: 'medium title' },
   ]);
 
   const renderTabBar = (
@@ -49,8 +45,8 @@ export const AutoWidthTabBar = () => {
       indicatorStyle={styles.indicator}
       style={styles.tabbar}
       contentContainerStyle={styles.tabbarContentContainer}
+      tabStyle={styles.tab}
       labelStyle={styles.label}
-      tabStyle={styles.tabStyle}
       gap={20}
       direction={direction}
     />
@@ -58,6 +54,7 @@ export const AutoWidthTabBar = () => {
 
   return (
     <TabView
+      lazy
       navigationState={{
         index,
         routes,
@@ -70,8 +67,8 @@ export const AutoWidthTabBar = () => {
   );
 };
 
-AutoWidthTabBar.options = {
-  title: 'Scrollable tab bar (auto width)',
+ScrollableTabBar.options = {
+  title: 'Scrollable tab bar',
   headerShadowVisible: false,
   headerTintColor: '#fff',
   headerStyle: {
@@ -86,13 +83,13 @@ const styles = StyleSheet.create({
   tabbarContentContainer: {
     paddingHorizontal: 10,
   },
+  tab: {
+    width: 120,
+  },
   indicator: {
     backgroundColor: '#ffeb3b',
   },
   label: {
     fontWeight: '400',
-  },
-  tabStyle: {
-    width: 'auto',
   },
 });

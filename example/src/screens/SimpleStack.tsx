@@ -3,15 +3,15 @@ import type { ParamListBase } from '@react-navigation/native';
 import {
   createStackNavigator,
   HeaderStyleInterpolators,
+  type StackNavigationOptions,
   type StackScreenProps,
-  TransitionPresets,
 } from '@react-navigation/stack';
 import * as React from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
-import { Albums } from '../Shared/Albums';
-import { Article } from '../Shared/Article';
-import { NewsFeed } from '../Shared/NewsFeed';
+import { Albums } from '../shared/Albums';
+import { Article } from '../shared/Article';
+import { NewsFeed } from '../shared/NewsFeed';
 
 export type SimpleStackParams = {
   Article: { author: string } | undefined;
@@ -30,9 +30,23 @@ const ArticleScreen = ({
       <View style={styles.buttons}>
         <Button
           variant="filled"
-          onPress={() => navigation.push('NewsFeed', { date: Date.now() })}
+          onPress={() => navigation.replace('NewsFeed', { date: Date.now() })}
         >
-          Push feed
+          Replace with feed
+        </Button>
+        <Button variant="filled" onPress={() => navigation.popTo('Albums')}>
+          Pop to Albums
+        </Button>
+        <Button
+          variant="tinted"
+          onPress={() =>
+            navigation.setParams({
+              author:
+                route.params?.author === 'Gandalf' ? 'Babel fish' : 'Gandalf',
+            })
+          }
+        >
+          Update params
         </Button>
         <Button variant="tinted" onPress={() => navigation.pop()}>
           Pop screen
@@ -53,11 +67,11 @@ const NewsFeedScreen = ({
   return (
     <ScrollView>
       <View style={styles.buttons}>
-        <Button variant="filled" onPress={() => navigation.push('Albums')}>
+        <Button variant="filled" onPress={() => navigation.navigate('Albums')}>
           Navigate to album
         </Button>
-        <Button variant="tinted" onPress={() => navigation.pop()}>
-          Pop screen
+        <Button variant="tinted" onPress={() => navigation.goBack()}>
+          Go back
         </Button>
       </View>
       <NewsFeed scrollEnabled={scrollEnabled} date={route.params.date} />
@@ -77,8 +91,8 @@ const AlbumsScreen = ({
         >
           Push article
         </Button>
-        <Button variant="tinted" onPress={() => navigation.pop()}>
-          Pop screen
+        <Button variant="tinted" onPress={() => navigation.pop(2)}>
+          Pop by 2
         </Button>
       </View>
       <Albums scrollEnabled={scrollEnabled} />
@@ -86,11 +100,14 @@ const AlbumsScreen = ({
   );
 };
 
-const SimpleStack = createStackNavigator<SimpleStackParams>();
+const Stack = createStackNavigator<SimpleStackParams>();
 
-export function MixedHeaderMode({
+export function SimpleStack({
   navigation,
-}: StackScreenProps<ParamListBase>) {
+  screenOptions,
+}: StackScreenProps<ParamListBase> & {
+  screenOptions?: StackNavigationOptions;
+}) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -98,41 +115,31 @@ export function MixedHeaderMode({
   }, [navigation]);
 
   return (
-    <SimpleStack.Navigator
+    <Stack.Navigator
       screenOptions={{
+        ...screenOptions,
         headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
       }}
     >
-      <SimpleStack.Group
-        screenOptions={{
-          ...TransitionPresets.SlideFromRightIOS,
-          headerMode: 'float',
-        }}
-      >
-        <SimpleStack.Screen
-          name="Article"
-          component={ArticleScreen}
-          options={({ route }) => ({
-            title: `Article by ${route.params?.author ?? 'Unknown'}`,
-          })}
-          initialParams={{ author: 'Gandalf' }}
-        />
-        <SimpleStack.Screen
-          name="NewsFeed"
-          component={NewsFeedScreen}
-          options={{ title: 'Feed' }}
-        />
-      </SimpleStack.Group>
-      <SimpleStack.Screen
+      <Stack.Screen
+        name="Article"
+        component={ArticleScreen}
+        options={({ route }) => ({
+          title: `Article by ${route.params?.author ?? 'Unknown'}`,
+        })}
+        initialParams={{ author: 'Gandalf' }}
+      />
+      <Stack.Screen
+        name="NewsFeed"
+        component={NewsFeedScreen}
+        options={{ title: 'Feed' }}
+      />
+      <Stack.Screen
         name="Albums"
         component={AlbumsScreen}
-        options={{
-          ...TransitionPresets.ModalSlideFromBottomIOS,
-          headerMode: 'screen',
-          title: 'Albums',
-        }}
+        options={{ title: 'Albums' }}
       />
-    </SimpleStack.Navigator>
+    </Stack.Navigator>
   );
 }
 
@@ -141,6 +148,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
-    padding: 12,
+    margin: 12,
   },
 });

@@ -48,8 +48,8 @@ import {
   type RootStackParamList,
   SCREENS,
 } from './screens';
-import { NotFound } from './Screens/NotFound';
-import { SettingsItem } from './Shared/SettingsItem';
+import { NotFound } from './screens/NotFound';
+import { SettingsItem } from './shared/SettingsItem';
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 const Stack = createStackNavigator<RootStackParamList>();

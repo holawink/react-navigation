@@ -10,9 +10,9 @@ import {
   TabView,
 } from 'react-native-tab-view';
 
-import { Article } from '../../Shared/Article';
-import { Chat } from '../../Shared/Chat';
-import { Contacts } from '../../Shared/Contacts';
+import { Article } from '../../shared/Article';
+import { Chat } from '../../shared/Chat';
+import { Contacts } from '../../shared/Contacts';
 
 type Route = {
   key: string;

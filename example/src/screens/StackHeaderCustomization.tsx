@@ -22,9 +22,9 @@ import {
 } from 'react-native';
 import { Appbar } from 'react-native-paper';
 
-import { Albums } from '../Shared/Albums';
-import { Article } from '../Shared/Article';
-import { BlurView } from '../Shared/BlurView';
+import { Albums } from '../shared/Albums';
+import { Article } from '../shared/Article';
+import { BlurView } from '../shared/BlurView';
 
 type SimpleStackParams = {
   Article: { author: string };

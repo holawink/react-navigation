@@ -27,9 +27,9 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
-import { Albums } from '../Shared/Albums';
-import { Article } from '../Shared/Article';
-import { NewsFeed } from '../Shared/NewsFeed';
+import { Albums } from '../shared/Albums';
+import { Article } from '../shared/Article';
+import { NewsFeed } from '../shared/NewsFeed';
 
 export type SimpleStackParams = {
   Article: { author: string } | undefined;

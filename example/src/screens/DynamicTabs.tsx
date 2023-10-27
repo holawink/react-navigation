@@ -1,9 +1,8 @@
 import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Button } from '@react-navigation/elements';
+import { Button, Text } from '@react-navigation/elements';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Title } from 'react-native-paper';
 
 type BottomTabParams = {
   [key: string]: undefined;
@@ -29,19 +28,24 @@ export function DynamicTabs() {
         >
           {() => (
             <View style={styles.container}>
-              <Title>Tab {i}</Title>
-              <Button onPress={() => setTabs((tabs) => [...tabs, tabs.length])}>
-                Add a tab
-              </Button>
-              <Button
-                onPress={() =>
-                  setTabs((tabs) =>
-                    tabs.length > 1 ? tabs.slice(0, -1) : tabs
-                  )
-                }
-              >
-                Remove a tab
-              </Button>
+              <Text style={styles.heading}>Tab {i}</Text>
+              <View style={styles.buttons}>
+                <Button
+                  onPress={() => setTabs((tabs) => [...tabs, tabs.length])}
+                >
+                  Add a tab
+                </Button>
+                <Button
+                  color="tomato"
+                  onPress={() =>
+                    setTabs((tabs) =>
+                      tabs.length > 1 ? tabs.slice(0, -1) : tabs
+                    )
+                  }
+                >
+                  Remove a tab
+                </Button>
+              </View>
             </View>
           )}
         </BottomTabs.Screen>
@@ -55,6 +59,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 8,
+  },
+  heading: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  buttons: {
     gap: 8,
   },
 });

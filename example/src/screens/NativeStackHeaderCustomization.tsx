@@ -1,15 +1,23 @@
-import { Button, useHeaderHeight } from '@react-navigation/elements';
+import { Button } from '@react-navigation/elements';
 import type { ParamListBase } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { Platform, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { Appbar } from 'react-native-paper';
 
-import { Albums } from '../Shared/Albums';
-import { Article } from '../Shared/Article';
-import { NewsFeed } from '../Shared/NewsFeed';
+import { Albums } from '../shared/Albums';
+import { Article } from '../shared/Article';
+import { NewsFeed } from '../shared/NewsFeed';
 
 export type NativeStackParams = {
   Article: { author: string } | undefined;
@@ -24,22 +32,13 @@ const ArticleScreen = ({
   route,
 }: NativeStackScreenProps<NativeStackParams, 'Article'>) => {
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
+    <ScrollView>
       <View style={styles.buttons}>
         <Button
           variant="filled"
           onPress={() => navigation.push('NewsFeed', { date: Date.now() })}
         >
           Push feed
-        </Button>
-        <Button
-          variant="filled"
-          onPress={() => navigation.replace('NewsFeed', { date: Date.now() })}
-        >
-          Replace with feed
-        </Button>
-        <Button variant="filled" onPress={() => navigation.popTo('Albums')}>
-          Pop to Albums
         </Button>
         <Button variant="tinted" onPress={() => navigation.pop()}>
           Pop screen
@@ -57,16 +56,8 @@ const NewsFeedScreen = ({
   route,
   navigation,
 }: NativeStackScreenProps<NativeStackParams, 'NewsFeed'>) => {
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerSearchBarOptions: {
-        placeholder: 'Search',
-      },
-    });
-  }, [navigation]);
-
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
+    <ScrollView>
       <View style={styles.buttons}>
         <Button variant="filled" onPress={() => navigation.push('Albums')}>
           Push Albums
@@ -83,10 +74,8 @@ const NewsFeedScreen = ({
 const AlbumsScreen = ({
   navigation,
 }: NativeStackScreenProps<NativeStackParams, 'Albums'>) => {
-  const headerHeight = useHeaderHeight();
-
   return (
-    <ScrollView contentContainerStyle={{ paddingTop: headerHeight }}>
+    <ScrollView>
       <View style={styles.buttons}>
         <Button
           variant="filled"
@@ -107,7 +96,7 @@ const AlbumsScreen = ({
 
 const Stack = createNativeStackNavigator<NativeStackParams>();
 
-export function NativeStack({
+export function NativeStackHeaderCustomization({
   navigation,
 }: NativeStackScreenProps<ParamListBase>) {
   React.useLayoutEffect(() => {
@@ -117,15 +106,46 @@ export function NativeStack({
     });
   }, [navigation]);
 
+  const onPress = () => {
+    Alert.alert(
+      'Never gonna give you up!',
+      'Never gonna let you down! Never gonna run around and desert you!'
+    );
+  };
+
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Article"
         component={ArticleScreen}
-        options={({ route }) => ({
+        options={({ route, navigation }) => ({
           title: `Article by ${route.params?.author ?? 'Unknown'}`,
-          headerLargeTitle: true,
-          headerLargeTitleShadowVisible: false,
+          headerTintColor: 'white',
+          headerTitle: ({ tintColor }) => (
+            <Appbar.Action
+              color={tintColor}
+              icon="signal-5g"
+              onPress={onPress}
+            />
+          ),
+          headerLeft: ({ tintColor, canGoBack }) =>
+            canGoBack ? (
+              <Appbar.Action
+                color={tintColor}
+                icon="arrow-left-thick"
+                onPress={navigation.goBack}
+              />
+            ) : null,
+          headerRight: ({ tintColor }) => (
+            <Appbar.Action color={tintColor} icon="music" onPress={onPress} />
+          ),
+          headerBackground: () => (
+            <Image
+              source={require('../../assets/cpu.jpg')}
+              resizeMode="cover"
+              style={styles.headerBackground}
+            />
+          ),
         })}
         initialParams={{ author: 'Gandalf' }}
       />
@@ -134,7 +154,9 @@ export function NativeStack({
         component={NewsFeedScreen}
         options={{
           title: 'Feed',
-          fullScreenGestureEnabled: true,
+          headerLeft: ({ tintColor }) => (
+            <Appbar.Action color={tintColor} icon="spa" onPress={onPress} />
+          ),
         }}
       />
       <Stack.Screen
@@ -142,9 +164,12 @@ export function NativeStack({
         component={AlbumsScreen}
         options={{
           title: 'Albums',
-          presentation: 'modal',
-          headerTransparent: true,
-          headerBlurEffect: 'light',
+          headerTintColor: 'tomato',
+          headerStyle: { backgroundColor: 'papayawhip' },
+          headerBackVisible: true,
+          headerLeft: ({ tintColor }) => (
+            <Appbar.Action color={tintColor} icon="music" onPress={onPress} />
+          ),
         }}
       />
     </Stack.Navigator>
@@ -157,5 +182,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 12,
     padding: 12,
+  },
+  headerBackground: {
+    height: undefined,
+    width: undefined,
+    flex: 1,
   },
 });

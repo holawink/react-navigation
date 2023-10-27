@@ -13,8 +13,8 @@ import * as React from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 import type { LinkComponentDemoParamList } from '../screens';
-import { Albums } from '../Shared/Albums';
-import { Article } from '../Shared/Article';
+import { Albums } from '../shared/Albums';
+import { Article } from '../shared/Article';
 
 const scrollEnabled = Platform.select({ web: true, default: false });
 

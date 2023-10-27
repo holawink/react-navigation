@@ -7,8 +7,8 @@ import {
 import * as React from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
-import { Albums } from '../Shared/Albums';
-import { Article } from '../Shared/Article';
+import { Albums } from '../shared/Albums';
+import { Article } from '../shared/Article';
 
 type MixedStackParams = {
   Article: { author: string };
@@ -24,18 +24,22 @@ const ArticleScreen = ({
   return (
     <ScrollView>
       <View style={styles.buttons}>
-        <Button
-          variant="filled"
-          onPress={() => navigation.push('Article', { author: 'Dalek' })}
-        >
-          Push article
-        </Button>
-        <Button variant="tinted" onPress={() => navigation.goBack()}>
-          Go back
-        </Button>
-        <Button variant="filled" onPress={() => navigation.push('Albums')}>
-          Push album
-        </Button>
+        <View>
+          <Button
+            variant="filled"
+            onPress={() => navigation.push('Article', { author: 'Dalek' })}
+          >
+            Push article
+          </Button>
+          <Button variant="tinted" onPress={() => navigation.goBack()}>
+            Go back
+          </Button>
+        </View>
+        <View>
+          <Button variant="filled" onPress={() => navigation.push('Albums')}>
+            Push album
+          </Button>
+        </View>
       </View>
       <Article
         author={{ name: route.params.author }}
@@ -49,18 +53,22 @@ const AlbumsScreen = ({ navigation }: StackScreenProps<MixedStackParams>) => {
   return (
     <ScrollView>
       <View style={styles.buttons}>
-        <Button variant="filled" onPress={() => navigation.push('Albums')}>
-          Push album
-        </Button>
-        <Button variant="tinted" onPress={() => navigation.goBack()}>
-          Go back
-        </Button>
-        <Button
-          variant="filled"
-          onPress={() => navigation.push('Article', { author: 'The Doctor' })}
-        >
-          Push article
-        </Button>
+        <View>
+          <Button variant="filled" onPress={() => navigation.push('Albums')}>
+            Push album
+          </Button>
+          <Button variant="tinted" onPress={() => navigation.goBack()}>
+            Go back
+          </Button>
+        </View>
+        <View>
+          <Button
+            variant="filled"
+            onPress={() => navigation.push('Article', { author: 'The Doctor' })}
+          >
+            Push article
+          </Button>
+        </View>
       </View>
       <Albums scrollEnabled={scrollEnabled} />
     </ScrollView>

@@ -18,7 +18,7 @@ import {
   View,
 } from 'react-native';
 
-import { Article } from '../Shared/Article';
+import { Article } from '../shared/Article';
 
 type PreventRemoveParams = {
   Article: { author: string };
