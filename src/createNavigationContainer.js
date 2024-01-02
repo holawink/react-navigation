@@ -1,5 +1,5 @@
 import React from 'react';
-import { Linking } from 'react-native';
+import { Linking, AppState } from 'react-native';
 import { BackHandler } from './PlatformHelpers';
 import NavigationActions from './NavigationActions';
 import addNavigationHelpers from './addNavigationHelpers';
@@ -45,6 +45,8 @@ export default function createNavigationContainer(Component) {
           ? Component.router.getStateForAction(this._initialAction)
           : null,
       };
+
+      this.changeEventListener = null
     }
 
     _isStateful() {
@@ -63,11 +65,11 @@ export default function createNavigationContainer(Component) {
       if (keys.length !== 0) {
         throw new Error(
           'This navigator has both navigation and container props, so it is ' +
-            `unclear if it should own its own state. Remove props: "${keys.join(
-              ', '
-            )}" ` +
-            'if the navigator should get its state from the navigation prop. If the ' +
-            'navigator should maintain its own state, do not pass a navigation prop.'
+          `unclear if it should own its own state. Remove props: "${keys.join(
+            ', '
+          )}" ` +
+          'if the navigator should get its state from the navigation prop. If the ' +
+          'navigator should maintain its own state, do not pass a navigation prop.'
         );
       }
     }
@@ -144,7 +146,7 @@ export default function createNavigationContainer(Component) {
         return;
       }
 
-      Linking.addEventListener('url', this._handleOpenURL);
+      this.changeEventListener = AppState.addEventListener('change', this._handleOpenURL)
 
       Linking.getInitialURL().then(url => url && this._handleOpenURL({ url }));
 
@@ -160,7 +162,7 @@ export default function createNavigationContainer(Component) {
 
     componentWillUnmount() {
       this._isMounted = false;
-      Linking.removeEventListener('url', this._handleOpenURL);
+      this.changeEventListener.remove();
       this.subs && this.subs.remove();
     }
 
@@ -209,7 +211,7 @@ export default function createNavigationContainer(Component) {
             state: nav,
             addListener: (eventName, handler) => {
               if (eventName !== 'action') {
-                return { remove: () => {} };
+                return { remove: () => { } };
               }
               this._actionEventSubscribers.add(handler);
               return {
