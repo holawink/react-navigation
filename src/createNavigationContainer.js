@@ -90,6 +90,9 @@ export default function createNavigationContainer(Component) {
     }
 
     _handleOpenURL = ({ url }) => {
+      if (!url) {
+        return
+      }
       const parsedUrl = this._urlToPathAndParams(url);
       if (parsedUrl) {
         const { path, params } = parsedUrl;
