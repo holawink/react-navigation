@@ -165,7 +165,9 @@ export default function createNavigationContainer(Component) {
 
     componentWillUnmount() {
       this._isMounted = false;
-      this.changeEventListener.remove();
+      if (this.changeEventListener) {
+        this.changeEventListener.remove();
+      }
       this.subs && this.subs.remove();
     }
 
